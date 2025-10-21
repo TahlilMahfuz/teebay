@@ -19,6 +19,12 @@ export const productTypeDef = gql`
     categories: [Category!]!
   }
 
+  type ProductCategory {
+    productId: Int!
+    categoryId: Int!
+    category: Category!
+  }
+
   input AddProductInput {
     title: String!
     description: String!
@@ -36,5 +42,6 @@ export const productTypeDef = gql`
 
   type Mutation {
     addProduct(data: AddProductInput!): Product!
+    deleteProduct(id: Int!): Product!
   }
 `;

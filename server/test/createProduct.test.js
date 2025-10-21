@@ -18,7 +18,6 @@ describe("Create Product Service & Coverage", () => {
   beforeAll(async () => {
     await prisma.productCategory.deleteMany();
     await prisma.product.deleteMany();
-    await prisma.category.deleteMany();
     await prisma.user.deleteMany({ where: { email: testUser.email } });
 
     await registerUser(testUser);
@@ -36,7 +35,6 @@ describe("Create Product Service & Coverage", () => {
   afterAll(async () => {
     await prisma.productCategory.deleteMany();
     await prisma.product.deleteMany();
-    await prisma.category.deleteMany();
     await prisma.user.deleteMany({ where: { email: testUser.email } });
     await prisma.$disconnect();
   });

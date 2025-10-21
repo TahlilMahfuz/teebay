@@ -27,6 +27,25 @@ export const createProduct = async (data) => {
   };
 };
 
+export const deleteProductById = async (productId) => {
+  const product = await prisma.product.findUnique({
+    where: { id: productId },
+    include: { categories: { include: { category: true } } },
+  });
+
+  if (!product) throw new Error("Product not found");
+
+  await prisma.productCategory.deleteMany({ where: { productId } });
+
+  await prisma.product.delete({ where: { id: productId } });
+
+  return {
+    ...product,
+    categories: product.categories.map((pc) => pc.category),
+  };
+};
+
+
 
 
 export const getAllProducts = () =>
