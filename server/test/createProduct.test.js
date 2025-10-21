@@ -1,8 +1,8 @@
 import prisma from "../src/config/db.js";
 import { registerUser, loginUser } from "../src/modules/user/user.service.js";
-import { addProduct } from "../src/modules/product/product.service.js";
+import { addProduct, getAllProducts, getProductById, getAllCategories } from "../src/modules/product/product.service.js";
 
-describe("Create Product Service", () => {
+describe("Create Product Service & Coverage", () => {
   const testUser = {
     firstname: "Test",
     lastname: "User",
@@ -13,19 +13,16 @@ describe("Create Product Service", () => {
   };
 
   let authUser = null;
+  let createdProduct = null;
 
   beforeAll(async () => {
-    // Clean database in correct dependency order
     await prisma.productCategory.deleteMany();
     await prisma.product.deleteMany();
     await prisma.category.deleteMany();
     await prisma.user.deleteMany({ where: { email: testUser.email } });
 
-    // Register and log in the test user
     await registerUser(testUser);
     authUser = await loginUser(testUser.email, testUser.password);
-
-    // Seed required categories (matching your schema)
     const categories = ["ELECTRONICS", "FURNITURE"];
     for (const name of categories) {
       await prisma.category.upsert({
@@ -37,7 +34,6 @@ describe("Create Product Service", () => {
   });
 
   afterAll(async () => {
-    // Clean up in correct order again
     await prisma.productCategory.deleteMany();
     await prisma.product.deleteMany();
     await prisma.category.deleteMany();
@@ -55,13 +51,12 @@ describe("Create Product Service", () => {
       categories: ["ELECTRONICS", "FURNITURE"],
     };
 
-    const product = await addProduct(productData);
+    createdProduct = await addProduct(productData);
 
-    // ✅ Assertions
-    expect(product).toHaveProperty("id");
-    expect(product.title).toBe(productData.title);
-    expect(product.ownerId).toBe(authUser.id);
-    expect(product.categories.length).toBeGreaterThan(0);
+    expect(createdProduct).toHaveProperty("id");
+    expect(createdProduct.title).toBe(productData.title);
+    expect(createdProduct.ownerId).toBe(authUser.id);
+    expect(createdProduct.categories.length).toBe(2);
   });
 
   it("should throw error for invalid category", async () => {
@@ -88,5 +83,24 @@ describe("Create Product Service", () => {
     };
 
     await expect(addProduct(invalidData)).rejects.toThrow("Product must have at least one category");
+  });
+
+  it("should get all products", async () => {
+    const products = await getAllProducts();
+    expect(Array.isArray(products)).toBe(true);
+    expect(products.length).toBeGreaterThan(0);
+  });
+
+  it("should get product by id", async () => {
+    const product = await getProductById(createdProduct.id);
+    expect(product).toBeDefined();
+    expect(product.id).toBe(createdProduct.id);
+    expect(product.categories.length).toBeGreaterThan(0);
+  });
+
+  it("should get all categories", async () => {
+    const categories = await getAllCategories();
+    expect(Array.isArray(categories)).toBe(true);
+    expect(categories.length).toBeGreaterThan(0);
   });
 });
