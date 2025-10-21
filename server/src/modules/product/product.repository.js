@@ -1,0 +1,39 @@
+import prisma from "../../config/db.js";
+
+export const createProduct = async (data) => {
+  const product = await prisma.product.create({
+    data: {
+      title: data.title,
+      description: data.description,
+      price: data.price,
+      rentPerDay: data.rentPerDay,
+      ownerId: data.ownerId,
+      categories: {
+        create: data.categories.map((categoryName) => ({
+          category: { connect: { name: categoryName } },
+        })),
+      },
+    },
+    include: {
+      categories: {
+        include: { category: true },
+      },
+    },
+  });
+
+  return {
+    ...product,
+    categories: product.categories.map((pc) => pc.category),
+  };
+};
+
+
+
+export const getAllProducts = () =>
+  prisma.product.findMany({ include: { categories: true } });
+
+export const getAllCategories = () => 
+  prisma.category.findMany();
+
+export const getProductById = (id) =>
+  prisma.product.findUnique({ where: { id }, include: { categories: true } });
