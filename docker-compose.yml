@@ -1,0 +1,40 @@
+services:
+  teebay_db:
+    image: postgres:15
+    container_name: teebay_db
+    ports:
+      - "5432:5432"
+    environment:
+      POSTGRES_USER: ${POSTGRES_USER}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
+      POSTGRES_DB: ${POSTGRES_DB}
+    volumes:
+      - db_data:/var/lib/postgresql/data
+
+  teebay_server:
+    build:
+      context: ./server
+      dockerfile: Dockerfile
+    container_name: teebay_server
+    environment:
+      - DATABASE_URL=postgresql://${POSTGRES_USER}:${POSTGRES_PASSWORD}@teebay_db:5432/${POSTGRES_DB}?schema=public
+      - PORT=4000
+    ports:
+      - "4000:4000"
+    depends_on:
+      - teebay_db
+
+  # teebay_client:
+  #   build:
+  #     context: ./client
+  #     dockerfile: Dockerfile
+  #   container_name: teebay_client
+  #   ports:
+  #     - "5173:5173"
+  #   environment:
+  #     - VITE_API_URL=http://teebay_server:4000/graphql
+  #   depends_on:
+  #     - teebay_server
+
+volumes:
+  db_data:
