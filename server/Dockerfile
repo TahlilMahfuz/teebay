@@ -20,4 +20,4 @@ RUN npx prisma generate
 EXPOSE 4000
 
 # Start the server in development mode, running migrations first
-CMD ["sh", "-c", "npx prisma migrate deploy && npm run dev"]
+CMD ["sh", "-c", "npx prisma migrate deploy && npx prisma db seed && npm run dev"]
