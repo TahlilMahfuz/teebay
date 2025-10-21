@@ -8,6 +8,7 @@ export const userTypeDef = gql`
     email: String!
     phone: String
     address: String
+    token: String
     createdAt: String
     updatedAt: String
   }
