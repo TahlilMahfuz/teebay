@@ -44,4 +44,16 @@ export const productTypeDef = gql`
     addProduct(data: AddProductInput!): Product!
     deleteProduct(id: Int!): Product!
   }
+  
+  input EditProductInput {
+    title: String
+    description: String
+    price: Float
+    rentPerDay: Float
+    categories: [String!]
+  }
+
+  extend type Mutation {
+    editProduct(productId: Int!, data: EditProductInput!): Product!
+  }
 `;

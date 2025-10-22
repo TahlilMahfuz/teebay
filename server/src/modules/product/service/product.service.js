@@ -35,5 +35,4 @@ export const removeProduct = async (productId, userId) => {
   return deletedProduct;
 };
 
-
-export { getAllProducts, getProductById, getAllCategories};  
+export { getAllProducts, getProductById, getAllCategories};

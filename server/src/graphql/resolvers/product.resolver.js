@@ -1,6 +1,6 @@
 import { addProduct, getAllProducts, getProductById, getAllCategories, removeProduct} from "../../modules/product/service/product.service.js";
+import { editProduct } from "../../modules/product/service/editProduct.service.js";
 import { purchaseProduct } from "../../modules/product/service/buyProduct.service.js";
-import { isAuthenticated } from "../../middleware/authContext.js";
 
 export const productResolvers = {
   Query: {
@@ -31,6 +31,11 @@ export const productResolvers = {
       } else {
         throw new Error("Unauthorized. Please login.");
       }
-    }
+    },
+    editProduct: async (_, { productId, data }, { user }) => {
+      if (!user) throw new Error("Authentication required");
+
+      return await editProduct(productId, user.id, data);
+    },
   },
 };
