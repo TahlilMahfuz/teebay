@@ -37,10 +37,21 @@ export const getUserTransactions = async (userId) => {
     },
   });
 
+  const mapProductCategories = (product) => ({
+    ...product,
+    categories: product.categories.map(pc => pc.category),
+  });
+
   return {
-    boughtProducts: bought || [],
-    soldProducts: sold || [],
-    rentedProducts: borrowed || [],
-    lentProducts: lent || [],
+    boughtProducts: bought.map(mapProductCategories),
+    soldProducts: sold.map(mapProductCategories),
+    rentedProducts: borrowed.map(r => ({
+      ...r,
+      product: mapProductCategories(r.product),
+    })),
+    lentProducts: lent.map(r => ({
+      ...r,
+      product: mapProductCategories(r.product),
+    })),
   };
 };
