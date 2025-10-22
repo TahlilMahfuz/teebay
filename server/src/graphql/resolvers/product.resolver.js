@@ -1,4 +1,5 @@
-import { addProduct, getAllProducts, getProductById, getAllCategories, removeProduct } from "../../modules/product/product.service.js";
+import { addProduct, getAllProducts, getProductById, getAllCategories, removeProduct} from "../../modules/product/service/product.service.js";
+import { purchaseProduct } from "../../modules/product/service/buyProduct.service.js";
 import { isAuthenticated } from "../../middleware/authContext.js";
 
 export const productResolvers = {
@@ -21,6 +22,13 @@ export const productResolvers = {
         return await removeProduct(id, context.userId);
       }
       else{
+        throw new Error("Unauthorized. Please login.");
+      }
+    },
+    purchaseProduct: async (_, { productId }, context) => {
+      if (context.userId) {
+        return await purchaseProduct(productId, context.userId);
+      } else {
         throw new Error("Unauthorized. Please login.");
       }
     }
