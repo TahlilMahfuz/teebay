@@ -1,7 +1,7 @@
 import prisma from "../src/config/db.js";
 import { registerUser, loginUser } from "../src/modules/user/user.service.js";
-import { addProduct, getProductById } from "../src/modules/product/product.service.js";
-import { removeProduct } from "../src/modules/product/product.service.js";
+import { addProduct, getProductById } from "../src/modules/product/service/product.service.js";
+import { removeProduct } from "../src/modules/product/service/product.service.js";
 
 describe("Delete Product Service", () => {
   let testUser;
@@ -39,6 +39,10 @@ describe("Delete Product Service", () => {
   });
 
   afterAll(async () => {
+    await prisma.productCategory.deleteMany({});
+    await prisma.product.deleteMany({});
+    await prisma.user.deleteMany({ where: { email: "deleteuser@test.com" } });
+    await prisma.user.deleteMany({ where: { email: "otheruser@test.com" } });
     await prisma.$disconnect();
   });
 
@@ -59,7 +63,7 @@ describe("Delete Product Service", () => {
     const otherUser = await registerUser({
       firstname: "Other",
       lastname: "User",
-      email: "otheruser535@test.com",
+      email: "otheruser@test.com",
       password: "123456",
     });
 

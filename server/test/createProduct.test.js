@@ -1,6 +1,6 @@
 import prisma from "../src/config/db.js";
-import { registerUser, loginUser } from "../src/modules/user/user.service.js";
-import { addProduct, getAllProducts, getProductById, getAllCategories } from "../src/modules/product/product.service.js";
+import { addProduct, getAllCategories, getAllProducts, getProductById } from "../src/modules/product/service/product.service.js";
+import { loginUser, registerUser } from "../src/modules/user/user.service.js";
 
 describe("Create Product Service & Coverage", () => {
   const testUser = {
