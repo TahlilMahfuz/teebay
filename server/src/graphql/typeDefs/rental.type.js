@@ -30,6 +30,7 @@ export const rentalTypeDef = gql`
     buyerId: Int
     buyer: User
     rentals: [Rental!]!
+    owner: User!
   }
 
   extend type Query {
