@@ -1,4 +1,4 @@
-import { createProduct, getAllProducts, getProductById, getAllCategories, deleteProductById } from "./product.repository.js";
+import { createProduct, getAllProducts, getProductById, getAllCategories, deleteProductById } from "../repository/product.repository.js";
 
 export const addProduct = async (data) => {
   if (!data.categories || !Array.isArray(data.categories) || data.categories.length === 0) {

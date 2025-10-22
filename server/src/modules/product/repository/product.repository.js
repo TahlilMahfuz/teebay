@@ -1,4 +1,4 @@
-import prisma from "../../config/db.js";
+import prisma from "../../../config/db.js";
 
 export const createProduct = async (data) => {
   const product = await prisma.product.create({
