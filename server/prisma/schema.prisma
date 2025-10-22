@@ -14,16 +14,24 @@ datasource db {
 }
 
 model User {
-  id        Int      @id @default(autoincrement())
-  firstname String
-  lastname  String
-  email     String   @unique
-  password  String
-  phone     String?
-  address   String?
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
-  products  Product[]
+  id              Int        @id @default(autoincrement())
+  firstname       String
+  lastname        String
+  email           String     @unique
+  password        String
+  phone           String?
+  address         String?
+  createdAt       DateTime   @default(now())
+  updatedAt       DateTime   @updatedAt
+
+  // User’s own listed products (for selling/renting)
+  products        Product[]  @relation("UserOwnedProducts")
+
+  // Products this user bought
+  boughtProducts  Product[]  @relation("UserBoughtProducts")
+
+  // Rentals (products this user rented from others)
+  rentals         Rental[]   @relation("UserRentals")
 
   @@map("users")
 }
@@ -37,9 +45,21 @@ model Product {
   viewCount       Int          @default(0)
   createdAt       DateTime     @default(now())
   updatedAt       DateTime     @updatedAt
+
+  // The owner (who created/listed the product)
   ownerId         Int
-  owner           User         @relation(fields: [ownerId], references: [id])
+  owner           User         @relation("UserOwnedProducts", fields: [ownerId], references: [id])
+
+  // If product has been bought
+  isSold          Boolean      @default(false)
+  buyerId         Int?
+  buyer           User?        @relation("UserBoughtProducts", fields: [buyerId], references: [id])
+
+  // Categories (many-to-many)
   categories      ProductCategory[]
+
+  // Rental history for this product
+  rentals         Rental[]     @relation("ProductRentals")
 
   @@map("products")
 }
@@ -60,4 +80,18 @@ model ProductCategory {
 
   @@id([productId, categoryId])
   @@map("product_categories")
+}
+
+model Rental {
+  id          Int       @id @default(autoincrement())
+  productId   Int
+  renterId    Int
+  startDate   DateTime
+  endDate     DateTime
+  createdAt   DateTime  @default(now())
+
+  product     Product   @relation("ProductRentals", fields: [productId], references: [id])
+  renter      User      @relation("UserRentals", fields: [renterId], references: [id])
+
+  @@map("rentals")
 }
