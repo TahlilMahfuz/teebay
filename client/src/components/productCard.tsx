@@ -61,7 +61,10 @@ export default function ProductCard({
   const [editDescription, setEditDescription] = useState(description)
   const [editPrice, setEditPrice] = useState(price)
   const [editRentPerDay, setEditRentPerDay] = useState(rentPerDay)
-  const [editCategories, setEditCategories] = useState<string[]>(categories.map((c) => c.name))
+  const [editCategories, setEditCategories] = useState<Category[]>(
+    categories?.filter(c => c.name)?.map(c => ({ id: c.id, name: c.name })) || []
+  );
+
 
   const [editProduct, { loading: editLoading }] = useMutation(EDIT_PRODUCT, {
     refetchQueries: [{ query: ALL_PRODUCTS }],
@@ -88,7 +91,7 @@ export default function ProductCard({
 
 const handleEdit = async () => {
   try {
-    await editProduct({
+    const { data } = await editProduct({
       variables: {
         productId: Number(id),
         data: {
@@ -96,10 +99,17 @@ const handleEdit = async () => {
           description: editDescription,
           price: editPrice,
           rentPerDay: editRentPerDay,
-          categories: editCategories,
+          categories: editCategories.map(c => c.name),
         },
       },
     });
+    if (data?.editProduct) {
+      setEditTitle(data.editProduct.title);
+      setEditDescription(data.editProduct.description);
+      setEditPrice(data.editProduct.price);
+      setEditRentPerDay(data.editProduct.rentPerDay);
+      setEditCategories(data.editProduct.categories.map((c: Category) => c.name));
+    }
 
     notifications.show({
       message: `Product ${id} updated successfully!`,
@@ -277,12 +287,19 @@ const handleDelete = async () => {
           <MultiSelect
             label="Categories"
             placeholder="Select categories"
-            data={["ELECTRONICS", "FURNITURE", "SPORTING_GOODS", "OUTDOOR", "OTHER"]}
-            value={editCategories}
-            onChange={setEditCategories}
+            data={["ELECTRONICS", "FURNITURE", "SPORTING GOODS", "OUTDOOR", "TOYS", "HOME APPLIANCES"]}
+            value={editCategories.map(c => c.name).filter(Boolean)}
+            onChange={(values) => {
+              const newCats = values
+                .filter((v): v is string => !!v) // only non-empty strings
+                .map((name, index) => ({ id: `${index}`, name }));
+              setEditCategories(newCats);
+            }}
+
             searchable
             clearable
           />
+
           <Group justify="flex-end" gap="xs">
             <Button variant="light" onClick={() => setEditModalOpen(false)}>
               Cancel
