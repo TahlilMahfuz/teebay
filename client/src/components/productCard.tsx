@@ -160,6 +160,7 @@ const handleDelete = async () => {
 
   const handleViewDetails = async () => {
     try {
+      // console.log("rentals",rentals)
       await updateViewCount({
         variables: {
           updateViewCountId: Number(id),

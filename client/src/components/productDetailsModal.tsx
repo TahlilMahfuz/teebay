@@ -142,7 +142,7 @@ export default function ProductDetailsModal({
     }
   }
 
-  const isRented = rentals && rentals.length < 0
+  const isRented = rentals && rentals.length > 0
   const isOwner = Number(user?.id) === ownerId
   const canBuyOrRent = !isOwner && !isSold && !isRented
 

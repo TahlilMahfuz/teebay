@@ -13,6 +13,10 @@ interface Category {
   name: string
 }
 
+interface Rental {
+  id: string
+}
+
 interface Product {
   id: string
   title: string
@@ -25,6 +29,7 @@ interface Product {
   ownerId: string
   categories: Category[]
   isSold?: boolean
+  rentals: Rental[]
 }
 
 interface AllProductsData {
@@ -78,6 +83,7 @@ export default function ProductsPage() {
                 ownerId={product.ownerId}
                 categories={product.categories}
                 isSold={product.isSold}
+                rentals={product.rentals}
               />
             </Grid.Col>
           ))}
