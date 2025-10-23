@@ -75,3 +75,23 @@ export const UPDATE_VIEW_COUNT = gql`
     }
   }
 `
+
+export const ADD_PRODUCT = gql`
+  mutation AddProduct($data: AddProductInput!) {
+  addProduct(data: $data) {
+    id
+    title
+    description
+    price
+    rentPerDay
+    viewCount
+    ownerId
+    createdAt
+    updatedAt
+    categories {
+      id
+      name
+    }
+  }
+}
+`

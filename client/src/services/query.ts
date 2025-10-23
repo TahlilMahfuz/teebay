@@ -20,4 +20,12 @@ export const ALL_PRODUCTS = gql`
   }
 `;
 
+export const ALL_CATEGORIES = gql`
+  query AllCategories {
+    allCategories {
+      id
+      name
+    }
+  }
+`;
 

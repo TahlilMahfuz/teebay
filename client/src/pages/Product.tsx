@@ -1,10 +1,12 @@
 "use client"
 
 import { useQuery } from "@apollo/client"
-import { Container, Title, Text, Grid, Loader, Center, Alert } from "@mantine/core"
+import { Button, Container, Title, Text, Grid, Loader, Center, Alert } from "@mantine/core"
 import { AlertCircle } from "lucide-react"
 import ProductCard from "../components/productCard"
 import { ALL_PRODUCTS } from "../services/query"
+import { useState } from "react"
+import AddProductModal from "../components/modals/addProductModal"
 
 interface Category {
   id: string
@@ -29,19 +31,26 @@ interface AllProductsData {
 }
 
 export default function ProductsPage() {
+  const [addProductOpened, setAddProductOpened] = useState(false)
   const { data, loading, error } = useQuery<AllProductsData>(ALL_PRODUCTS, {
-  pollInterval: 5000, // refetch every 5 seconds
-})
-
+    pollInterval: 5000,
+  })
 
   return (
     <Container size="xl" py="xl">
-      <div className="mb-8 text-center">
-      <Title order={1} mb="xs">
-        All Products
-      </Title>
-      <Text c="dimmed">Browse our collection of available products and rentals</Text>
-    </div>
+      <div className="mb-8 flex items-center justify-between">
+        <div>
+          <Title order={1} mb="xs">
+            All Products
+          </Title>
+          <Text c="dimmed">Browse our collection of available products and rentals</Text>
+        </div>
+        <Button onClick={() => setAddProductOpened(true)} color="blue">
+          + Add Product
+        </Button>
+      </div>
+
+      <AddProductModal opened={addProductOpened} onClose={() => setAddProductOpened(false)} />
 
       {error && (
         <Alert icon={<AlertCircle size={16} />} color="red" mb="lg">
