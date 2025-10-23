@@ -3,7 +3,7 @@
 import { useQuery } from "@apollo/client"
 import { Button, Container, Title, Text, Grid, Loader, Center, Alert } from "@mantine/core"
 import { AlertCircle } from "lucide-react"
-import ProductCard from "../components/productCard"
+import ProductCard from "../components/card/productCard"
 import { ALL_PRODUCTS } from "../services/query"
 import { useState } from "react"
 import AddProductModal from "../components/modals/addProductModal"
