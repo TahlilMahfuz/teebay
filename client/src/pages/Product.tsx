@@ -29,7 +29,10 @@ interface AllProductsData {
 }
 
 export default function ProductsPage() {
-  const { data, loading, error } = useQuery<AllProductsData>(ALL_PRODUCTS)
+  const { data, loading, error } = useQuery<AllProductsData>(ALL_PRODUCTS, {
+  pollInterval: 5000, // refetch every 5 seconds
+})
+
 
   return (
     <Container size="xl" py="xl">
