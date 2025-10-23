@@ -1,6 +1,7 @@
 import { addProduct, getAllProducts, getProductById, getAllCategories, removeProduct} from "../../modules/product/service/product.service.js";
 import { editProduct } from "../../modules/product/service/editProduct.service.js";
 import { purchaseProduct } from "../../modules/product/service/buyProduct.service.js";
+import { updateViewCountById } from "../../modules/product/service/product.service.js";
 
 export const productResolvers = {
   Query: {
@@ -37,5 +38,8 @@ export const productResolvers = {
 
       return await editProduct(productId, user.id, data);
     },
+    updateViewCount: async (_, { id }) => {
+      return await updateViewCountById(id);
+    }
   },
 };

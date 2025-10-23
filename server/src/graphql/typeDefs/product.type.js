@@ -55,5 +55,6 @@ export const productTypeDef = gql`
 
   extend type Mutation {
     editProduct(productId: Int!, data: EditProductInput!): Product!
+    updateViewCount(id: Int!): Product!
   }
 `;

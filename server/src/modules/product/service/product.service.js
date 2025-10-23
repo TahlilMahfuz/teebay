@@ -1,4 +1,4 @@
-import { createProduct, getAllProducts, getProductById, getAllCategories, deleteProductById } from "../repository/product.repository.js";
+import { createProduct, getAllProducts, getProductById, getAllCategories, deleteProductById, updateViewCount } from "../repository/product.repository.js";
 
 export const addProduct = async (data) => {
   if (!data.categories || !Array.isArray(data.categories) || data.categories.length === 0) {
@@ -34,5 +34,14 @@ export const removeProduct = async (productId, userId) => {
   const deletedProduct = await deleteProductById(productId);
   return deletedProduct;
 };
+
+export const updateViewCountById = async (id) => {
+  const product = await getProductById(id);
+  if (!product) throw new Error("Product not found");
+  const productWithUpdatedViewCount = await updateViewCount(id);
+  return productWithUpdatedViewCount;
+};
+
+
 
 export { getAllProducts, getProductById, getAllCategories};

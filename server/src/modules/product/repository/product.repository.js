@@ -75,3 +75,15 @@ export const getAllCategories = () =>
 
 export const getProductById = (id) =>
   prisma.product.findUnique({ where: { id }, include: { categories: true } });
+
+export const updateViewCount =async (id) =>{
+  const product = await getProductById(id);
+  if (!product) throw new Error("Product not found");
+  await prisma.product.update({ where: { id }, data: { viewCount: { increment: 1 } } });
+  const updatedProduct = await getProductById(id);
+  console.log(updatedProduct);
+  return {
+    ...updatedProduct,
+    categories: product.categories?.map((pc) => pc.category) || [],
+  }
+}
