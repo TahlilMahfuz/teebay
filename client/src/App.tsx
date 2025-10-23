@@ -31,7 +31,7 @@ function App() {
                   path="/products"
                   element={
                   <>
-                    <Placeholder title="Products" description="This page will be built later" />
+                    {/* <Placeholder title="Products" description="This page will be built later" /> */}
                     <Product />
                   </>
                   }

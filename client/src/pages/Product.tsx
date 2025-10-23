@@ -36,12 +36,12 @@ export default function ProductsPage() {
 
   return (
     <Container size="xl" py="xl">
-      <div className="mb-8">
-        <Title order={1} mb="xs">
-          All Products
-        </Title>
-        <Text c="dimmed">Browse our collection of available products and rentals</Text>
-      </div>
+      <div className="mb-8 text-center">
+      <Title order={1} mb="xs">
+        All Products
+      </Title>
+      <Text c="dimmed">Browse our collection of available products and rentals</Text>
+    </div>
 
       {error && (
         <Alert icon={<AlertCircle size={16} />} color="red" mb="lg">
