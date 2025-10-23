@@ -48,8 +48,25 @@ export const deleteProductById = async (productId) => {
 
 
 
-export const getAllProducts = () =>
-  prisma.product.findMany({ include: { categories: true } });
+export const getAllProducts = async () => {
+  const products = await prisma.product.findMany({
+    include: {
+      categories: {
+        include: {
+          category: true,
+        },
+      },
+    },
+  });
+
+  return products.map((product) => ({
+    ...product,
+    categories:
+      product.categories?.map((pc) => pc.category) || [],
+  }));
+};
+
+
 
 export const getAllCategories = () => 
   prisma.category.findMany();
