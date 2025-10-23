@@ -31,3 +31,31 @@ export const LOGIN_USER = gql`
     }
   }
 `;
+
+export const EDIT_PRODUCT = gql`
+  mutation EditProduct($productId: Int!, $data: EditProductInput!) {
+    editProduct(productId: $productId, data: $data) {
+      id
+      title
+      description
+      price
+      rentPerDay
+      viewCount
+      createdAt
+      updatedAt
+      ownerId
+      categories {
+        id
+        name
+      }
+    }
+  }
+`
+
+export const DELETE_PRODUCT = gql`
+  mutation DeleteProduct($productId: Int!) {
+    deleteProduct(productId: $productId) {
+      id
+    }
+  }
+`

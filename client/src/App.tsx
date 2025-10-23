@@ -8,6 +8,7 @@ import Landing from './pages/Landing';
 import Login from './pages/Login';
 import Signup from './pages/Signup';
 import Placeholder from './pages/Placeholder';
+import Product from './pages/Product';
 
 import '@mantine/core/styles.css';
 
@@ -25,7 +26,12 @@ function App() {
                 <Route path="/signup" element={<Signup />} />
                 <Route
                   path="/products"
-                  element={<Placeholder title="Products" description="This page will be built later" />}
+                  element={
+                  <>
+                    <Placeholder title="Products" description="This page will be built later" />
+                    <Product />
+                  </>
+                  }
                 />
                 <Route
                   path="/bought"
