@@ -13,8 +13,10 @@ interface Category {
   name: string
 }
 
-interface Rental {
+interface Rentals {
   id: string
+  startDate: string
+  endDate: string
 }
 
 interface Product {
@@ -29,7 +31,7 @@ interface Product {
   ownerId: string
   categories: Category[]
   isSold?: boolean
-  rentals: Rental[]
+  rentals: Rentals[]
 }
 
 interface AllProductsData {

@@ -32,6 +32,8 @@ interface Category {
 
 interface Rentals{
   id: string
+  startDate: string
+  endDate: string
 }
 
 interface ProductCardProps {
@@ -160,7 +162,7 @@ const handleDelete = async () => {
 
   const handleViewDetails = async () => {
     try {
-      // console.log("rentals",rentals)
+      console.log("rentals",rentals)
       await updateViewCount({
         variables: {
           updateViewCountId: Number(id),

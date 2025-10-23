@@ -16,9 +16,12 @@ interface Category {
   name: string
 }
 
-interface Rental {
+interface Rentals{
   id: string
+  startDate: string 
+  endDate: string
 }
+
 
 interface ProductDetailsModalProps {
   opened: boolean
@@ -31,7 +34,7 @@ interface ProductDetailsModalProps {
   createdAt: string
   categories: Category[]
   isSold?: boolean
-  rentals?: Rental[]
+  rentals?: Rentals[]
   productId: number
   ownerId: number
 }
@@ -133,10 +136,13 @@ export default function ProductDetailsModal({
         message: "Product rented successfully!",
         color: "green",
       });
-    } catch (error) {
+    } catch (err) {
+      const error = err as ApolloError;
+      const message =
+      error.graphQLErrors?.[0]?.message || error.message || "Failed to purchase product";
       console.error("Rental error:", error)
       notifications.show({
-        message: "Failed to rent product",
+        message: `Failed to rent product: ${message}`,
         color: "red",
       });
     }
@@ -144,7 +150,7 @@ export default function ProductDetailsModal({
 
   const isRented = rentals && rentals.length > 0
   const isOwner = Number(user?.id) === ownerId
-  const canBuyOrRent = !isOwner && !isSold && !isRented
+  const canBuyOrRent = !isOwner && !isSold
 
   return (
     <>
@@ -236,11 +242,46 @@ export default function ProductDetailsModal({
                 This product has been sold
               </Text>
             )}
-            {isRented && (
+            {/* {isRented && (
               <Text size="sm" c="orange" ta="center">
                 This product is currently rented
               </Text>
-            )}
+            )} */}
+            {isRented && rentals && rentals.length > 0 && (() => {
+              const now = new Date();
+
+              // Find the active rental where today is between start and end date
+              const activeRental = rentals.find((rental) => {
+                const start = new Date(rental.startDate);
+                const end = new Date(rental.endDate);
+                return now >= start && now <= end;
+              });
+
+              if (!activeRental) return null; // No currently active rental
+
+              const start = new Date(activeRental.startDate).toLocaleDateString(undefined, {
+                year: "numeric",
+                month: "short",
+                day: "numeric",
+              });
+              const end = new Date(activeRental.endDate).toLocaleDateString(undefined, {
+                year: "numeric",
+                month: "short",
+                day: "numeric",
+              });
+
+              return (
+                <div style={{ marginTop: "8px" }}>
+                  <Text size="sm" c="orange" ta="center" fw={500}>
+                    This product is currently rented
+                  </Text>
+                  <Text size="sm" ta="center" c="dimmed">
+                    From {start} to {end}
+                  </Text>
+                </div>
+              );
+            })()}
+
           </Group>
 
           {/* Close Button */}

@@ -19,6 +19,8 @@ export const ALL_PRODUCTS = gql`
       isSold
       rentals{
         id
+        startDate
+        endDate
       }
     }
   }
