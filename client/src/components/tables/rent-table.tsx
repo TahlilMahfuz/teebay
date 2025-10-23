@@ -113,10 +113,34 @@ export default function RentedProductsTable() {
                 <Text fw={500}>${rental.product.rentPerDay}</Text>
               </Table.Td>
               <Table.Td>
-                <Text size="sm">{formatDate(rental.startDate)}</Text>
+                <Text size="sm">
+                  {rental.startDate
+                    ? new Date(
+                        isNaN(Number(rental.startDate))
+                          ? rental.startDate
+                          : Number(rental.startDate)
+                      ).toLocaleString(undefined, {
+                        year: "numeric",
+                        month: "short",
+                        day: "numeric",
+                      })
+                    : "Loading..."}
+                </Text>
               </Table.Td>
               <Table.Td>
-                <Text size="sm">{formatDate(rental.endDate)}</Text>
+                <Text size="sm">
+                  {rental.startDate
+                    ? new Date(
+                        isNaN(Number(rental.startDate))
+                          ? rental.startDate
+                          : Number(rental.startDate)
+                      ).toLocaleString(undefined, {
+                        year: "numeric",
+                        month: "short",
+                        day: "numeric",
+                      })
+                    : "Loading..."}
+                </Text>
               </Table.Td>
               <Table.Td>
                 <Group gap="xs">

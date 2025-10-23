@@ -1,52 +1,62 @@
-"use client"
+"use client";
 
-import { Table, Badge, Text, Group, Stack, Loader, Center, Alert } from "@mantine/core"
-import { AlertCircle } from "lucide-react"
-import { useQuery } from "@apollo/client"
-import { GET_USER_ACTIVITY } from "../../services/query"
-import { formatDate } from "../../lib/utils"
+import {
+  Table,
+  Badge,
+  Text,
+  Group,
+  Stack,
+  Loader,
+  Center,
+  Alert,
+} from "@mantine/core";
+import { AlertCircle } from "lucide-react";
+import { useQuery } from "@apollo/client";
+import { GET_USER_ACTIVITY } from "../../services/query";
+import { formatDate } from "../../lib/utils";
 
 interface Rental {
-  id: string
-  productId: string
-  renterId: string
-  startDate: string
-  endDate: string
-  createdAt: string
+  id: string;
+  productId: string;
+  renterId: string;
+  startDate: string;
+  endDate: string;
+  createdAt: string;
   product: {
-    id: string
-    title: string
-    description: string
-    price: number
-    rentPerDay: number
+    id: string;
+    title: string;
+    description: string;
+    price: number;
+    rentPerDay: number;
     categories: Array<{
-      id: string
-      name: string
-    }>
-  }
+      id: string;
+      name: string;
+    }>;
+  };
   renter: {
-    id: string
-    firstname: string
-    lastname: string
-    email: string
-  }
+    id: string;
+    firstname: string;
+    lastname: string;
+    email: string;
+  };
 }
 
 interface UserActivityData {
   getUserActivity: {
-    lentProducts: Rental[]
-  }
+    lentProducts: Rental[];
+  };
 }
 
 export default function LentProductsTable() {
-  const { data, loading, error } = useQuery<UserActivityData>(GET_USER_ACTIVITY)
+  const { data, loading, error } =
+    useQuery<UserActivityData>(GET_USER_ACTIVITY);
 
   if (loading) {
     return (
       <Center py="xl">
         <Loader />
       </Center>
-    )
+    );
   }
 
   if (error) {
@@ -54,17 +64,17 @@ export default function LentProductsTable() {
       <Alert icon={<AlertCircle size={16} />} color="red">
         Failed to load lent products. Please try again later.
       </Alert>
-    )
+    );
   }
 
-  const rentals = data?.getUserActivity?.lentProducts || []
+  const rentals = data?.getUserActivity?.lentProducts || [];
 
   if (rentals.length === 0) {
     return (
       <Center py="xl">
         <Text c="dimmed">No lent products yet</Text>
       </Center>
-    )
+    );
   }
 
   return (
@@ -107,10 +117,34 @@ export default function LentProductsTable() {
                 <Text fw={500}>${rental.product.rentPerDay}</Text>
               </Table.Td>
               <Table.Td>
-                <Text size="sm">{formatDate(rental.startDate)}</Text>
+                <Text size="sm">
+                  {rental.startDate
+                    ? new Date(
+                        isNaN(Number(rental.startDate))
+                          ? rental.startDate
+                          : Number(rental.startDate)
+                      ).toLocaleString(undefined, {
+                        year: "numeric",
+                        month: "short",
+                        day: "numeric",
+                      })
+                    : "Loading..."}
+                </Text>
               </Table.Td>
               <Table.Td>
-                <Text size="sm">{formatDate(rental.endDate)}</Text>
+                <Text size="sm">
+                  {rental.startDate
+                    ? new Date(
+                        isNaN(Number(rental.startDate))
+                          ? rental.startDate
+                          : Number(rental.startDate)
+                      ).toLocaleString(undefined, {
+                        year: "numeric",
+                        month: "short",
+                        day: "numeric",
+                      })
+                    : "Loading..."}
+                </Text>
               </Table.Td>
               <Table.Td>
                 <Group gap="xs">
@@ -126,5 +160,5 @@ export default function LentProductsTable() {
         </Table.Tbody>
       </Table>
     </div>
-  )
+  );
 }
