@@ -10,10 +10,12 @@ export const isAuthenticated = async ({ req }) => {
   if (authHeader) {
     const token = authHeader;
     try {
+      // console.log(token);
       const decoded = jwt.verify(token, JWT_SECRET);
       userId = decoded.id;
       user = decoded;
     } catch (err) {
+      // console.error("Invalid or expired token:", err);
       console.error("Invalid or expired token:", err.message);
     }
   }

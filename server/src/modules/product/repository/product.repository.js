@@ -81,9 +81,11 @@ export const updateViewCount =async (id) =>{
   if (!product) throw new Error("Product not found");
   await prisma.product.update({ where: { id }, data: { viewCount: { increment: 1 } } });
   const updatedProduct = await getProductById(id);
-  console.log(updatedProduct);
+  // console.log(updatedProduct);
   return {
     ...updatedProduct,
+    createdAt: product.createdAt?.toISOString(),
+    updatedAt: product.updatedAt?.toISOString(),
     categories: product.categories?.map((pc) => pc.category) || [],
   }
 }
