@@ -30,6 +30,10 @@ interface Category {
   name: string
 }
 
+interface Rentals{
+  id: string
+}
+
 interface ProductCardProps {
   id: string
   title: string
@@ -39,7 +43,9 @@ interface ProductCardProps {
   viewCount: number
   createdAt: string
   ownerId: string
-  categories: Category[]
+  categories: Category[],
+  isSold?: boolean
+  rentals?: Rentals[]
 }
 
 export default function ProductCard({
@@ -52,6 +58,8 @@ export default function ProductCard({
   createdAt,
   ownerId,
   categories,
+  isSold,
+  rentals
 }: ProductCardProps) {
   const { user } = useAuth()
   const [editModalOpen, setEditModalOpen] = useState(false)
@@ -62,7 +70,7 @@ export default function ProductCard({
   const [editPrice, setEditPrice] = useState(price)
   const [editRentPerDay, setEditRentPerDay] = useState(rentPerDay)
   const [editCategories, setEditCategories] = useState<Category[]>(
-    categories?.filter(c => c.name)?.map(c => ({ id: c.id, name: c.name })) || []
+    categories?.filter(c => c.name)?.map(c => ({ id: c.id, name: c.name })) || [],
   );
 
 
@@ -335,6 +343,10 @@ const handleDelete = async () => {
         viewCount={viewCount}
         createdAt={createdAt}
         categories={categories}
+        productId={Number(id)}
+        ownerId={Number(ownerId)}
+        isSold={isSold}
+        rentals={rentals}
       />
     </>
   )

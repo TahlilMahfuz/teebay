@@ -56,14 +56,22 @@ export const getAllProducts = async () => {
           category: true,
         },
       },
+      rentals:true
     },
   });
 
+  // console.log(products);
   return products.map((product) => ({
     ...product,
     createdAt: product.createdAt?.toISOString(),
     updatedAt: product.updatedAt?.toISOString(),
     categories: product.categories?.map((pc) => pc.category) || [],
+    rentals: product.rentals?.map((r) => ({
+      ...r,
+      id: r.id.toString(),
+      startDate: r.startDate?.toISOString(),
+      endDate: r.endDate?.toISOString(),
+    })) || [],
   }));
 };
 

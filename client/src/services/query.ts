@@ -16,6 +16,10 @@ export const ALL_PRODUCTS = gql`
         id
         name
       }
+      isSold
+      rentals{
+        id
+      }
     }
   }
 `;

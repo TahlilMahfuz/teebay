@@ -17,6 +17,9 @@ export const productTypeDef = gql`
     updatedAt: String
     ownerId: Int!
     categories: [Category!]!
+    isSold: Boolean
+    buyerId: Int
+    buyer: User
   }
 
   type ProductCategory {

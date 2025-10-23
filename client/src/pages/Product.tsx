@@ -24,6 +24,7 @@ interface Product {
   updatedAt: string
   ownerId: string
   categories: Category[]
+  isSold?: boolean
 }
 
 interface AllProductsData {
@@ -76,6 +77,7 @@ export default function ProductsPage() {
                 createdAt={product.createdAt}
                 ownerId={product.ownerId}
                 categories={product.categories}
+                isSold={product.isSold}
               />
             </Grid.Col>
           ))}

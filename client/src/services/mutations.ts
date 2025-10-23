@@ -95,3 +95,59 @@ export const ADD_PRODUCT = gql`
   }
 }
 `
+
+export const PURCHASE_PRODUCT = gql`
+  mutation PurchaseProduct($productId: Int!) {
+    purchaseProduct(productId: $productId) {
+      id
+      title
+      description
+      price
+      rentPerDay
+      viewCount
+      createdAt
+      updatedAt
+      ownerId
+      categories {
+        id
+        name
+      }
+      isSold
+      buyerId
+    }
+  }
+`
+
+export const RENT_PRODUCT = gql`
+  mutation RentProduct($data: RentProductInput!) {
+    rentProduct(data: $data) {
+      id
+      productId
+      renterId
+      startDate
+      endDate
+      createdAt
+      product {
+        id
+        title
+        description
+        price
+        rentPerDay
+        ownerId
+        isSold
+        createdAt
+        updatedAt
+      }
+      renter {
+        id
+        firstname
+        lastname
+        email
+        phone
+        address
+        createdAt
+        updatedAt
+      }
+    }
+  }
+`
