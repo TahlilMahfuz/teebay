@@ -40,6 +40,8 @@ export const getUserTransactions = async (userId) => {
   const mapProductCategories = (product) => ({
     ...product,
     categories: product.categories.map(pc => pc.category),
+    createdAt: product.createdAt.toISOString(),
+    updatedAt: product.updatedAt.toISOString(),
   });
 
   return {

@@ -7,7 +7,7 @@ import Navbar from './components/Navbar';
 import Landing from './pages/Landing';
 import Login from './pages/Login';
 import Signup from './pages/Signup';
-import Placeholder from './pages/Placeholder';
+import Activity  from './pages/Activity';
 import Product from './pages/Product';
 
 import '@mantine/core/styles.css';
@@ -32,26 +32,17 @@ function App() {
                   path="/products"
                   element={
                   <>
-                    {/* <Placeholder title="Products" description="This page will be built later" /> */}
                     <Product />
                   </>
                   }
                 />
                 <Route
-                  path="/bought"
-                  element={<Placeholder title="Bought Products" description="This page will be built later" />}
-                />
-                <Route
-                  path="/sold"
-                  element={<Placeholder title="Sold Products" description="This page will be built later" />}
-                />
-                <Route
-                  path="/rented"
-                  element={<Placeholder title="Rented Products" description="This page will be built later" />}
-                />
-                <Route
-                  path="/lent"
-                  element={<Placeholder title="Lent Products" description="This page will be built later" />}
+                  path="/activity"
+                  element={
+                    <>
+                      <Activity />
+                    </>
+                }
                 />
               </Routes>
             </div>

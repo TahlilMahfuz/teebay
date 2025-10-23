@@ -34,10 +34,7 @@ export default function Navbar() {
                 {isAuthenticated ? (
                   <>
                     <Menu.Item onClick={() => navigate('/products')}>All Products</Menu.Item>
-                    <Menu.Item onClick={() => navigate('/bought')}>Bought</Menu.Item>
-                    <Menu.Item onClick={() => navigate('/sold')}>Sold</Menu.Item>
-                    <Menu.Item onClick={() => navigate('/rented')}>Rented</Menu.Item>
-                    <Menu.Item onClick={() => navigate('/lent')}>Lent</Menu.Item>
+                    <Menu.Item onClick={() => navigate('/activity')}>User Activity</Menu.Item>
                   </>
                 ) : (
                   <Menu.Item onClick={() => navigate('/products')}>All Products</Menu.Item>
