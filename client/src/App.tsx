@@ -11,6 +11,8 @@ import Placeholder from './pages/Placeholder';
 import Product from './pages/Product';
 
 import '@mantine/core/styles.css';
+import '@mantine/notifications/styles.css';
+import { Notifications } from '@mantine/notifications';
 
 function App() {
   return (
@@ -18,6 +20,7 @@ function App() {
       <MantineProvider>
         <AuthProvider>
           <Router>
+          <Notifications position='top-right'/>
             <div className="min-h-screen bg-gray-50">
               <Navbar />
               <Routes>

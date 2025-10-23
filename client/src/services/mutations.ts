@@ -53,9 +53,25 @@ export const EDIT_PRODUCT = gql`
 `
 
 export const DELETE_PRODUCT = gql`
-  mutation DeleteProduct($productId: Int!) {
-    deleteProduct(productId: $productId) {
+  mutation DeleteProduct($deleteProductId: Int!) {
+    deleteProduct(id: $deleteProductId) {
       id
+    }
+  }
+`;
+
+export const UPDATE_VIEW_COUNT = gql`
+  mutation UpdateViewCount($updateViewCountId: Int!) {
+    updateViewCount(id: $updateViewCountId) {
+      id
+      title
+      description
+      price
+      rentPerDay
+      viewCount
+      createdAt
+      updatedAt
+      ownerId
     }
   }
 `

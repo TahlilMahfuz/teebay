@@ -12,17 +12,18 @@ import {
   Textarea,
   NumberInput,
   MultiSelect,
-  ActionIcon,
   Menu,
   Loader,
 } from "@mantine/core"
-import { Eye, Calendar, Trash2, Edit2, MoreVertical } from "lucide-react"
-import { formatDistanceToNow } from "date-fns"
+import { Eye, Calendar, Trash2, Edit2 } from "lucide-react"
+// import { formatDistanceToNow } from "date-fns"
 import { useState } from "react"
 import { useMutation } from "@apollo/client"
 import { useAuth } from "../contexts/AuthContext"
-import { EDIT_PRODUCT, DELETE_PRODUCT } from "../services/mutations"
+import { EDIT_PRODUCT, DELETE_PRODUCT, UPDATE_VIEW_COUNT } from "../services/mutations"
 import { ALL_PRODUCTS } from "../services/query"
+import ProductDetailsModal from "../components/productDetailsModal"
+import { notifications } from "@mantine/notifications"
 
 interface Category {
   id: string
@@ -54,6 +55,8 @@ export default function ProductCard({
 }: ProductCardProps) {
   const { user } = useAuth()
   const [editModalOpen, setEditModalOpen] = useState(false)
+  const [detailsModalOpen, setDetailsModalOpen] = useState(false)
+  const [deleteConfirmOpen, setDeleteConfirmOpen] = useState(false)
   const [editTitle, setEditTitle] = useState(title)
   const [editDescription, setEditDescription] = useState(description)
   const [editPrice, setEditPrice] = useState(price)
@@ -62,6 +65,7 @@ export default function ProductCard({
 
   const [editProduct, { loading: editLoading }] = useMutation(EDIT_PRODUCT, {
     refetchQueries: [{ query: ALL_PRODUCTS }],
+    awaitRefetchQueries: true,
     onCompleted: () => {
       setEditModalOpen(false)
     },
@@ -69,45 +73,84 @@ export default function ProductCard({
 
   const [deleteProduct, { loading: deleteLoading }] = useMutation(DELETE_PRODUCT, {
     refetchQueries: [{ query: ALL_PRODUCTS }],
+    awaitRefetchQueries: true,
+    onCompleted: () => {
+      setDeleteConfirmOpen(false)
+    },
+  })
+
+  const [updateViewCount] = useMutation(UPDATE_VIEW_COUNT, {
+    refetchQueries: [{ query: ALL_PRODUCTS }],
   })
 
   const isOwner = user && user.id == ownerId
-//   console.log("Owner ID:", ownerId)
-//   console.log("User ID:", user?.id)
-//   console.log("Is Owner:", isOwner)
 
-  const formattedDate = formatDistanceToNow(new Date(createdAt), { addSuffix: true })
 
-  const handleEdit = async () => {
+const handleEdit = async () => {
+  try {
+    await editProduct({
+      variables: {
+        productId: Number(id),
+        data: {
+          title: editTitle,
+          description: editDescription,
+          price: editPrice,
+          rentPerDay: editRentPerDay,
+          categories: editCategories,
+        },
+      },
+    });
+
+    notifications.show({
+      message: `Product ${id} updated successfully!`,
+      color: "green",
+    });
+
+  } catch (error) {
+    console.error("Error editing product:", error);
+
+    notifications.show({
+      message: `Failed to edit product ${id}`,
+      color: "red",
+    });
+  }
+};
+
+const handleDelete = async () => {
+  try {
+    await deleteProduct({
+      variables: { deleteProductId: Number(id) },
+    });
+
+    notifications.show({
+      message: `Product ${id} deleted successfully!`,
+      color: "green",
+    });
+
+    console.log("Product deleted successfully", id);
+
+  } catch (error) {
+    console.error("Error deleting product:", error);
+
+    notifications.show({
+      message: `Failed to delete product ${id}`,
+      color: "red",
+    });
+  }
+};
+
+
+  const handleViewDetails = async () => {
     try {
-      await editProduct({
+      await updateViewCount({
         variables: {
-          productId: Number.parseInt(id),
-          data: {
-            title: editTitle,
-            description: editDescription,
-            price: editPrice,
-            rentPerDay: editRentPerDay,
-            categories: editCategories,
-          },
+          updateViewCountId: Number(id),
         },
       })
+      setDetailsModalOpen(true)
     } catch (error) {
-      console.error("Error editing product:", error)
-    }
-  }
-
-  const handleDelete = async () => {
-    if (window.confirm("Are you sure you want to delete this product?")) {
-      try {
-        await deleteProduct({
-          variables: {
-            productId: Number.parseInt(id),
-          },
-        })
-      } catch (error) {
-        console.error("Error deleting product:", error)
-      }
+      console.error("Error updating view count:", error)
+      setDetailsModalOpen(true)
     }
   }
 
@@ -155,7 +198,7 @@ export default function ProductCard({
             <Group gap="xs">
               <Calendar size={16} className="text-gray-500" />
               <Text size="xs" c="dimmed">
-                {formattedDate}
+                {createdAt ? new Date(createdAt).toDateString() : "No date"}
               </Text>
             </Group>
             <Group gap="xs">
@@ -169,32 +212,34 @@ export default function ProductCard({
 
         {/* Action Buttons */}
         <Group grow mt="md" gap="xs">
-          <Button fullWidth variant="light">
-            View Details
-          </Button>
-          
-          {isOwner && (
-            <Menu shadow="md" position="bottom-end">
-              <Menu.Target>
-                <ActionIcon variant="light" color="gray">
-                  <MoreVertical size={16} />
-                </ActionIcon>
-              </Menu.Target>
-              <Menu.Dropdown>
-                <Menu.Item leftSection={<Edit2 size={14} />} onClick={() => setEditModalOpen(true)}>
-                  Edit
-                </Menu.Item>
-                <Menu.Item
-                  leftSection={<Trash2 size={14} />}
-                  color="red"
-                  onClick={handleDelete}
-                  disabled={deleteLoading}
-                >
-                  {deleteLoading ? <Loader size={14} /> : "Delete"}
-                </Menu.Item>
-              </Menu.Dropdown>
-            </Menu>
-          )}
+          <Menu shadow="md" position="bottom-end">
+            <Menu.Target>
+              <Button fullWidth variant="light">
+                Actions
+              </Button>
+            </Menu.Target>
+            <Menu.Dropdown>
+              <Menu.Item leftSection={<Eye size={14} />} onClick={handleViewDetails}>
+                View Details
+              </Menu.Item>
+              {isOwner && (
+                <>
+                  <Menu.Divider />
+                  <Menu.Item leftSection={<Edit2 size={14} />} onClick={() => setEditModalOpen(true)}>
+                    Edit
+                  </Menu.Item>
+                  <Menu.Item
+                    leftSection={<Trash2 size={14} />}
+                    color="red"
+                    onClick={() => setDeleteConfirmOpen(true)}
+                    disabled={deleteLoading}
+                  >
+                    {deleteLoading ? <Loader size={14} /> : "Delete"}
+                  </Menu.Item>
+                </>
+              )}
+            </Menu.Dropdown>
+          </Menu>
         </Group>
       </Card>
 
@@ -248,6 +293,32 @@ export default function ProductCard({
           </Group>
         </Stack>
       </Modal>
+
+      <Modal opened={deleteConfirmOpen} onClose={() => setDeleteConfirmOpen(false)} title="Delete Product" size="sm">
+        <Stack gap="md">
+          <Text>Are you sure you want to delete this product? This action cannot be undone.</Text>
+          <Group justify="flex-end" gap="xs">
+            <Button variant="light" onClick={() => setDeleteConfirmOpen(false)}>
+              Cancel
+            </Button>
+            <Button color="red" onClick={handleDelete} loading={deleteLoading}>
+              Delete
+            </Button>
+          </Group>
+        </Stack>
+      </Modal>
+
+      <ProductDetailsModal
+        opened={detailsModalOpen}
+        onClose={() => setDetailsModalOpen(false)}
+        title={title}
+        description={description}
+        price={price}
+        rentPerDay={rentPerDay}
+        viewCount={viewCount}
+        createdAt={createdAt}
+        categories={categories}
+      />
     </>
   )
 }
