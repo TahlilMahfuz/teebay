@@ -229,7 +229,13 @@ JWT_SECRET=
 #### Teebay `.env` (if applicable)
 
 ```env
-# Add any additional environment variables
+# Teebay .env
+DATABASE_URL=postgresql://{username}:{password}@postgres:5432/teebay_db?schema=public
+PORT=4000
+
+POSTGRES_USER=
+POSTGRES_PASSWORD=
+POSTGRES_DB=teebay_db
 ```
 
 ### Step 2: Build and Run with Docker
