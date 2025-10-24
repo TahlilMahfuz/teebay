@@ -226,7 +226,7 @@ PORT=
 JWT_SECRET=
 ```
 
-#### Teebay `.env` (if applicable)
+#### Teebay `.env`
 
 ```env
 # Teebay .env
