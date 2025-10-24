@@ -24,17 +24,17 @@ services:
     depends_on:
       - teebay_db
 
-  # teebay_client:
-  #   build:
-  #     context: ./client
-  #     dockerfile: Dockerfile
-  #   container_name: teebay_client
-  #   ports:
-  #     - "5173:5173"
-  #   environment:
-  #     - VITE_API_URL=http://teebay_server:4000/graphql
-  #   depends_on:
-  #     - teebay_server
+  teebay_client:
+    build:
+      context: ./client
+      dockerfile: Dockerfile
+    container_name: teebay_client
+    ports:
+      - "5173:5173"
+    environment:
+      - VITE_API_URL=http://teebay_server:4000/graphql
+    depends_on:
+      - teebay_server
 
 volumes:
   db_data:

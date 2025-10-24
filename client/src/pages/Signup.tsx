@@ -46,10 +46,21 @@ export default function Signup() {
       address: (value) => (!value ? 'Address is required' : null),
       password: (value) => {
         if (!value) return 'Password is required';
-        return value.length >= 6 ? null : 'Password must be at least 6 characters';
+
+        if (value.length < 6)
+          return 'Password must be at least 6 characters';
+
+        if (!/[0-9]/.test(value))
+          return 'Password must contain at least one number';
+
+        if (!/[!@#$%^&*(),.?":{}|<>]/.test(value))
+          return 'Password must contain at least one special character';
+
+        return null;
       },
+
       confirmPassword: (value, values) =>
-        value !== values.password ? 'Passwords do not match' : null,
+        value !== values.password ? 'Passwords do not matchs' : null,
     },
   });
 
