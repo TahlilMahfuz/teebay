@@ -8,7 +8,9 @@
 ![GraphQL](https://img.shields.io/badge/GraphQL-Latest-e10098.svg)
 
 ---
+
 ## 📋 Table of Contents
+
 - [Overview](#overview)
 - [Tech Stack](#tech-stack)
 - [Features](#features)
@@ -19,7 +21,6 @@
 - [API Documentation](#api-documentation)
 - [Testing](#testing)
 - [Contributing](#contributing)
-- [License](#license)z
 
 ---
 
@@ -205,7 +206,7 @@ cd teebay
 
 ---
 
-## 📦 Installation
+## Installation
 
 ### Step 1: Environment Configuration
 
@@ -291,3 +292,93 @@ npm run dev
    ↓
 6. Request Processed or Rejected
 ```
+
+## Testing
+
+### Prerequisites
+
+Before running tests, ensure your database is properly set up:
+
+```bash
+cd server
+npx prisma migrate reset
+npx prisma db seed
+```
+
+These commands will:
+
+- Reset the database to a clean state
+- Apply all migrations
+- Seed the database with initial test data
+
+### Running Tests
+
+```bash
+cd server
+npm run test
+```
+
+### Test Results
+
+All tests are passing with comprehensive coverage across the application:
+
+| Metric | Result |
+|--------|--------|
+| **Test Suites** | 8 passed, 8 total ✅ |
+| **Tests** | 30 passed, 30 total ✅ |
+| **Execution Time** | 2.007s |
+| **Snapshots** | 0 total |
+
+### Code Coverage
+
+| Coverage Type | Percentage |
+|---------------|-----------|
+| **Statements** | 85.88% |
+| **Branches** | 75% |
+| **Functions** | 87.8% |
+| **Lines** | 89.85% |
+
+### Coverage by Module
+
+| Module | Statements | Branches | Functions | Lines | Notes |
+|--------|-----------|----------|-----------|-------|-------|
+| **config** | 100% | 100% | 100% | 100% | ✅ Full coverage |
+| **modules/product/repository** | 84.33% | 64.7% | 88% | 88.88% | - |
+| **modules/product/service** | 81.63% | 81.81% | 87.5% | 85.71% | - |
+| **modules/user** | 100% | 100% | 100% | 100% | ✅ Full coverage |
+| **utils** | 88.88% | 66.66% | 75% | 100% | - |
+
+### Test Suites
+
+The project includes 8 comprehensive test suites:
+
+- ✅ **buyProduct.test.js** - Purchase functionality
+- ✅ **userActivity.test.js** - User activity tracking
+- ✅ **deleteProduct.test.js** - Product deletion
+- ✅ **loginUser.test.js** - User authentication
+- ✅ **rentProduct.test.js** - Rental functionality
+- ✅ **editProduct.test.js** - Product editing
+- ✅ **createProduct.test.js** - Product creation
+- ✅ **registerUser.test.js** - User registration
+
+### Test Coverage Details
+
+#### High Coverage Areas (100%)
+
+- Database configuration
+- User repository and service layer
+- Rental product transactions
+
+#### Areas for Improvement
+
+- Product repository (70.96% statements, 30% branches)
+- Rent product service (71.42% statements)
+- Hash utility (88.88% statements, 66.66% branches)
+
+---
+
+## Contributing
+
+*Made with 💪✨ Effort & Dedication by K.M. Tahlil Mahfuz Faruk*
+
+---
