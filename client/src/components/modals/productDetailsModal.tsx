@@ -273,10 +273,13 @@ export default function ProductDetailsModal({
               return (
                 <div style={{ marginTop: "8px" }}>
                   <Text size="sm" c="orange" ta="center" fw={500}>
-                    This product is currently rented
+                    This product is currently rented!
                   </Text>
                   <Text size="sm" ta="center" c="dimmed">
                     From {start} to {end}
+                  </Text>
+                  <Text size="sm" ta="center" c="dimmed">
+                    Note: Bought product can only be provided after rental period ends.
                   </Text>
                 </div>
               );
