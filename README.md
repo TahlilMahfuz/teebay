@@ -65,7 +65,7 @@
 |-----------|---------|
 | ![Docker](https://img.shields.io/badge/-Docker-2496ED?logo=docker&logoColor=white) | Containerization |
 | ![Jest](https://img.shields.io/badge/-Jest-C21325?logo=jest&logoColor=white) | Unit Testing |
-| ![Supertest](https://img.shields.io/badge/-Supertest-000000?logo=npm&logoColor=white) | API Testing |
+| ![Supertest](https://img.shields.io/badge/-Supertest-000000?logo=npm&logoColor=white) | GraphQL Endpoint Testing |
 
 ---
 
